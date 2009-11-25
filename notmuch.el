@@ -1467,7 +1467,8 @@ Currently available key bindings:
   (save-excursion
     (beginning-of-line)
     (let ((beg (point)))
-      (forward-word)
+      (search-forward-regexp "[[:blank:]]")
+      (backward-char)
       (filter-buffer-substring beg (point)))))
 
 (defun notmuch-folder-show-search (&optional folder)
