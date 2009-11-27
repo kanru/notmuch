@@ -1460,7 +1460,10 @@ Currently available key bindings:
 	    (search (cdr (car folders))))
 	(insert name)
 	(indent-to 16 1)
-	(call-process notmuch-command nil t nil "count" search)
+	(call-process notmuch-command nil t nil "count" (concat search " and tag:unread"))
+        (previous-line)
+        (replace-string "\n" "/")
+        (call-process notmuch-command nil t nil "count" search)
 	(notmuch-folder-add (cdr folders)))))
 
 (defun notmuch-folder-find-name ()
