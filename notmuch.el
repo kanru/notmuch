@@ -71,6 +71,8 @@
     (define-key map "+" 'notmuch-show-add-tag)
     (define-key map "X" 'notmuch-show-mark-read-then-archive-then-exit)
     (define-key map "x" 'notmuch-show-archive-thread-then-exit)
+    (define-key map "h" 'notmuch-show-toggle-current-header)
+    (define-key map "b" 'notmuch-show-toggle-current-body)
     (define-key map "A" 'notmuch-show-mark-read-then-archive-thread)
     (define-key map "a" 'notmuch-show-archive-thread)
     (define-key map "p" 'notmuch-show-previous-message)
@@ -577,6 +579,26 @@ which this thread was originally shown."
           ))
   (force-window-update)
   (redisplay t))
+
+(defun notmuch-show-toggle-current-body ()
+  "Toggle the current message body."
+  (interactive)
+  (save-excursion
+    (notmuch-show-move-to-current-message-summary-line)
+    (unless (button-at (point))
+      (notmuch-show-next-button))
+    (push-button))
+  )
+
+(defun notmuch-show-toggle-current-header ()
+  (interactive)
+  (save-excursion
+    (notmuch-show-move-to-current-message-summary-line)
+    (next-line)
+    (unless (button-at (point))
+      (notmuch-show-next-button))
+    (push-button))
+  )
 
 (define-button-type 'notmuch-button-invisibility-toggle-type
   'action 'notmuch-toggle-invisible-action
