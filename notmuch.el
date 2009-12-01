@@ -595,7 +595,7 @@ which this thread was originally shown."
   (interactive)
   (save-excursion
     (notmuch-show-move-to-current-message-summary-line)
-    (next-line)
+    (forward-line)
     (unless (button-at (point))
       (notmuch-show-next-button))
     (push-button))
@@ -604,7 +604,7 @@ which this thread was originally shown."
 (defun notmuch-show-collapse-all ()
   (interactive)
   (save-excursion
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (while (not (notmuch-show-last-message-p))
       (unless (button-at (point))
         (notmuch-show-next-button))
@@ -616,7 +616,7 @@ which this thread was originally shown."
 (defun notmuch-show-expand-all ()
   (interactive)
   (save-excursion
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (while (not (notmuch-show-last-message-p))
       (unless (button-at (point))
         (notmuch-show-next-button))
@@ -1508,8 +1508,9 @@ Currently available key bindings:
 	(insert name)
 	(indent-to 16 1)
 	(call-process notmuch-command nil t nil "count" (concat search " and tag:unread"))
-        (previous-line)
-        (replace-string "\n" "/")
+        (forward-line -1)
+        (while (search-forward "\n" nil t)
+          (replace-match "/" nil t))
         (call-process notmuch-command nil t nil "count" search)
 	(notmuch-folder-add (cdr folders)))))
 
@@ -1542,6 +1543,6 @@ Currently available key bindings:
       (notmuch-folder-mode)
       (notmuch-folder-add notmuch-folders)
       (goto-char (point-min))
-      (goto-line n))))
+      (forward-line (1- n)))))
 
 (provide 'notmuch)
