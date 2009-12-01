@@ -71,6 +71,7 @@
     (define-key map "+" 'notmuch-show-add-tag)
     (define-key map "X" 'notmuch-show-mark-read-then-archive-then-exit)
     (define-key map "x" 'notmuch-show-archive-thread-then-exit)
+    (define-key map "B" 'notmuch-show-collapse-all)
     (define-key map "h" 'notmuch-show-toggle-current-header)
     (define-key map "b" 'notmuch-show-toggle-current-body)
     (define-key map "A" 'notmuch-show-mark-read-then-archive-thread)
@@ -599,6 +600,30 @@ which this thread was originally shown."
       (notmuch-show-next-button))
     (push-button))
   )
+
+(defun notmuch-show-collapse-all ()
+  (interactive)
+  (save-excursion
+    (beginning-of-buffer)
+    (while (not (notmuch-show-last-message-p))
+      (unless (button-at (point))
+        (notmuch-show-next-button))
+      (let ((invis-spec (button-get (button-at (point)) 'invisibility-spec)))
+        (add-to-invisibility-spec invis-spec))
+      (notmuch-show-next-open-message)
+      )))
+
+(defun notmuch-show-expand-all ()
+  (interactive)
+  (save-excursion
+    (beginning-of-buffer)
+    (while (not (notmuch-show-last-message-p))
+      (unless (button-at (point))
+        (notmuch-show-next-button))
+      (let ((invis-spec (button-get (button-at (point)) 'invisibility-spec)))
+        (remove-from-invisibility-spec invis-spec))
+      (notmuch-show-next-message)
+      )))
 
 (define-button-type 'notmuch-button-invisibility-toggle-type
   'action 'notmuch-toggle-invisible-action
