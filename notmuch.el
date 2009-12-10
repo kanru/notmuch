@@ -730,6 +730,7 @@ before the delimiter marking the beginning of the body."
   (re-search-forward notmuch-show-body-begin-regexp)
   (forward-line)
   (let ((beg (point-marker)))
+    (insert "\n")
     (re-search-forward notmuch-show-body-end-regexp)
     (let ((end (copy-marker (match-beginning 0))))
       (notmuch-show-markup-parts-region beg end depth)
