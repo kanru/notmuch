@@ -650,7 +650,7 @@ which this thread was originally shown."
       (move-to-column depth)
       (if (looking-at citation)
 	  (progn
-	    (while (looking-at citation)
+	    (while (looking-at (concat citation "\\|^$"))
 	      (forward-line)
 	      (move-to-column depth))
 	    (end-of-line 0)
