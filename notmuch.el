@@ -658,11 +658,10 @@ which this thread was originally shown."
                   (invis-spec (make-symbol "notmuch-citation-region")))
               (add-to-invisibility-spec invis-spec)
 	      (overlay-put overlay 'invisible invis-spec)
-              (let ((p (point-marker))
-                    (cite-button-text
+              (let ((cite-button-text
                      (concat "["  (number-to-string (count-lines beg-sub (point)))
                              "-line citation. Click/Enter to show.]")))
-                (goto-char (- beg-sub 1))
+                (goto-char (1- beg-sub))
                 (insert (concat "\n" indent))
                 (insert-button cite-button-text
                                'invisibility-spec invis-spec
@@ -671,7 +670,7 @@ which this thread was originally shown."
               ))))
       (move-to-column depth)
       (if (looking-at notmuch-show-signature-regexp)
-	  (let ((sig-lines (- (count-lines beg-sub end) 1)))
+	  (let ((sig-lines (1- (count-lines beg-sub end))))
 	    (if (<= sig-lines notmuch-show-signature-lines-max)
 		(progn
                   (let ((invis-spec (make-symbol "notmuch-signature-region")))
@@ -679,7 +678,7 @@ which this thread was originally shown."
                     (overlay-put (make-overlay beg-sub end)
                                  'invisible invis-spec)
                   
-                    (goto-char (- beg-sub 1))
+                    (goto-char (1- beg-sub))
                     (insert (concat "\n" indent))
                     (let ((sig-button-text (concat "[" (number-to-string sig-lines)
                                                    "-line signature. Click/Enter to show.]")))
